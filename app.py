@@ -253,6 +253,7 @@ def login():
         return "wrong method"
 
 
+# login a root
 @app.route('/login-admin/', methods=['POST'])
 def login_admin():
     response = {}
@@ -277,6 +278,7 @@ def login_admin():
         return "wrong method"
 
 
+# view product route
 @app.route('/view-products/', methods=["GET"])
 def get_product():
     response = {}
@@ -299,8 +301,6 @@ def get_product():
 
 
 # deleting route
-
-
 @app.route("/delete-product/<int:product_id>", methods=["GET"])
 def delete_product(product_id):
     response = {}
@@ -314,8 +314,6 @@ def delete_product(product_id):
 
 
 # editing the product database below
-
-
 @app.route('/edit-product/<int:product_id>', methods=["PUT"])
 def update_product(product_id):
     response = {}
@@ -342,6 +340,7 @@ def update_product(product_id):
         return response
 
 
+# using cloudinary to change pictures to urls
 def upload_file():
     app.logger.info('in upload route')
     cloudinary.config(
