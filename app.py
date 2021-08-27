@@ -79,6 +79,8 @@ app = Flask(__name__)
 CORS(app)
 app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
+
+
 # email code
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -233,28 +235,35 @@ def get_admin():
     return response
 
 
-@app.route('/login/', methods=['POST'])
+@app.route('/login/', methods=['POST', "GET", "PATCH"])
 def login():
     response = {}
 
-    if request.method == "POST":
+    if request.method == "GET":
+        with sqlite3.connect("Mobile.db") as conn:
+            conn.row_factory = dict_factory
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users")
+            users = cursor.fetchall()
+
+        response['status_code'] = 200
+        response['data'] = users
+        return response
+
+        # LOGIN
+    if request.method == "PATCH":
         username = request.json["username"]
         password = request.json["password"]
-        conn = sqlite3.connect("Mobile.db")
-        c = conn.cursor()
-        statement = (f"SELECT * FROM users WHERE username='{username}' and password ="
-                     f"'{password}'")
-        c.execute(statement)
-        if not c.fetchone():
-            response['message'] = "failed"
-            response["status_code"] = 401
-            return response
-        else:
-            response['message'] = "Signed in"
-            response["status_code"] = 201
-            return response
-    else:
-        return "wrong method"
+
+        with sqlite3.connect("Mobile.db") as conn:
+            conn.row_factory = dict_factory
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password,))
+            user = cursor.fetchone()
+
+        response['status_code'] = 200
+        response['data'] = user
+    return response
 
 
 # login a root
