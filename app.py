@@ -209,6 +209,7 @@ def hardware_place():
 def get_user():
     response = {}
     with sqlite3.connect("Mobile.db") as conn:
+        conn.row_factory = dict_factory
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users")
 
