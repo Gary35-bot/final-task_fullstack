@@ -235,35 +235,29 @@ def get_admin():
     return response
 
 
-@app.route('/login/', methods=['POST', "GET", "PATCH"])
+@app.route('/login/', methods=['PATCH'])
 def login():
     response = {}
 
-    if request.method == "GET":
-        with sqlite3.connect("Mobile.db") as conn:
-            conn.row_factory = dict_factory
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users")
-            users = cursor.fetchall()
+    if request.method == 'PATCH':
+        username = request.json['username']
+        password = request.json['password']
 
-        response['status_code'] = 200
-        response['data'] = users
+        with sqlite3.connect('Mobile.db') as conn:
+            cursor = conn.cursor()
+            cursor.row_factory = sqlite3.Row
+            cursor.execute('SELECT * FROM users WHERE username=? and password=?', (username, password))
+            user = cursor.fetchall()
+            data = []
+
+            for a in user:
+                data.append({u: a[u] for u in a.keys()})
+
+            response['message'] = 'success'
+            response['status_code'] = 200
+            response['data'] = data
+
         return response
-
-        # LOGIN
-    if request.method == "PATCH":
-        username = request.json["username"]
-        password = request.json["password"]
-
-        with sqlite3.connect("Mobile.db") as conn:
-            conn.row_factory = dict_factory
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password,))
-            user = cursor.fetchone()
-
-        response['status_code'] = 200
-        response['data'] = user
-    return response
 
 
 # login a root
