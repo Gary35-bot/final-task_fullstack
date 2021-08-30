@@ -121,7 +121,7 @@ def user_registration():
                                    "email,"
                                    "username,"
                                    "password) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                                   (first_name, last_name, identity, phone_number,
+                                   (full_name, last_name, identity, phone_number,
                                     email, username, password))
                     conn.commit()
                     response['message'] = "success"
