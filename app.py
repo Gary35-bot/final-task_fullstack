@@ -15,6 +15,7 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+
 class User(object):
     def __init__(self, id, username, password):
         self.id = id
