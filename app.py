@@ -101,7 +101,7 @@ def user_registration():
 
     if request.method == "POST":
         try:
-            first_name = request.json['first_name']
+            first_name = request.json['full_name']
             last_name = request.json['last_name']
             identity = request.json['identity']
             phone_number = request.json['phone_number']
