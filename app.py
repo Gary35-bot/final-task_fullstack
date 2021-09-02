@@ -323,7 +323,7 @@ def delete_product(product_id):
 
 
 # editing the product database below
-@app.route('/edit-product/<int:product_id>', methods=["PUT"])
+@app.route('/edit-product/<int:product_id>/', methods=["PUT"])
 def update_product(product_id):
     response = {}
 
