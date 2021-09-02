@@ -183,10 +183,10 @@ def hardware_place():
 
     if request.method == "POST":
         image = upload_file()
-        product_name = request.form['product_name']
-        description = request.form['description']
-        features = request.form['features']
-        price = request.form['price']
+        product_name = request.json['product_name']
+        description = request.json['description']
+        features = request.json['features']
+        price = request.json['price']
 
         with sqlite3.connect("Mobile.db") as conn:
             cursor = conn.cursor()
@@ -359,7 +359,7 @@ def upload_file():
     )
     # upload_result = None
     if request.method == 'POST' or request.method == 'PUT':
-        image = request.files['image']
+        image = request.json['image']
         app.logger.info('%s file_to_upload', image)
         if image:
             upload_result = cloudinary.uploader.upload(image)
