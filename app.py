@@ -263,11 +263,11 @@ def login():
 
 
 # login a root
-@app.route('/login-admin/', methods=['GET'])
+@app.route('/login-admin/', methods=['PATCH'])
 def login_admin():
     response = {}
 
-    if request.method == 'GET':
+    if request.method == 'PATCH':
         username = request.json['username']
         password = request.json['password']
 
