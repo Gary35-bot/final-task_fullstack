@@ -263,28 +263,29 @@ def login():
 
 
 # login a root
-@app.route('/login-admin/', methods=['POST'])
+@app.route('/login-admin/', methods=['PATCH'])
 def login_admin():
     response = {}
 
-    if request.method == "POST":
-        username = request.json["username"]
-        password = request.json["password"]
-        conn = sqlite3.connect("Mobile.db")
-        c = conn.cursor()
-        statement = (f"SELECT * FROM admin WHERE username='{username}' and password ="
-                     f"'{password}'")
-        c.execute(statement)
-        if not c.fetchone():
-            response['message'] = "failed"
-            response["status_code"] = 401
-            return response
-        else:
-            response['message'] = "Signed in"
-            response["status_code"] = 201
-            return response
-    else:
-        return "wrong method"
+    if request.method == 'PATCH':
+        username = request.json['username']
+        password = request.json['password']
+
+        with sqlite3.connect('Mobile.db') as conn:
+            cursor = conn.cursor()
+            cursor.row_factory = sqlite3.Row
+            cursor.execute('SELECT * FROM admin WHERE username=? and password=?', (username, password))
+            user = cursor.fetchall()
+            data = []
+
+            for a in user:
+                data.append({u: a[u] for u in a.keys()})
+
+            response['message'] = 'success'
+            response['status_code'] = 200
+            response['data'] = data
+
+        return response
 
 
 # view product route
@@ -369,3 +370,6 @@ def upload_file():
 
 if __name__ == '__main__':
     app.run()
+
+
+# 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
