@@ -350,6 +350,19 @@ def update_product(product_id):
         return response
 
 
+# email root
+
+@app.route('/emailsent/<email>', methods=['GET'])
+def send_email(email):
+    mail = Mail(app)
+
+    msg = Message('Test Message', sender='gafrica851@gmail.com', recipients=[email])
+    msg.body = "hello"
+    mail.send(msg)
+
+    return "Hello"
+
+
 # using cloudinary to change pictures to urls
 def upload_file():
     app.logger.info('in upload route')
