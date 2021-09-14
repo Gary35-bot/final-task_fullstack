@@ -246,18 +246,15 @@ def login():
         password = request.json['password']
 
         with sqlite3.connect('Mobile.db') as conn:
+            conn.row_factory = dict_factory
             cursor = conn.cursor()
-            cursor.row_factory = sqlite3.Row
             cursor.execute('SELECT * FROM users WHERE username=? and password=?', (username, password))
-            user = cursor.fetchall()
-            data = []
+            user = cursor.fetchone()
 
-            for a in user:
-                data.append({u: a[u] for u in a.keys()})
 
             response['message'] = 'success'
             response['status_code'] = 200
-            response['data'] = data
+            response['data'] = user
 
         return response
 
