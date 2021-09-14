@@ -22,23 +22,6 @@ class User(object):
         self.username = username
         self.password = password
 
-
-# def get_users():
-#     with sqlite3.connect('Mobile.db') as conn:
-#         cursor = conn.cursor()
-#         cursor.execute("SELECT * FROM users")
-#         users = cursor.fetchall()
-#
-#         new_data = []
-#
-#         for data in users:
-#             new_data.append(User(data[0], data[4], data[5]))
-#     return new_data
-#
-#
-# users = get_users()
-
-
 class Tables:
     def __init__(self):
         self.conn = sqlite3.connect('Mobile.db')
@@ -220,9 +203,25 @@ def get_user():
     response['data'] = posts
     return response
 
+
+# view profile
+@app.route('/view-user/<int:userid>', methods=["GET"])
+def view():
+    response = {}
+
+    if request.method == "GET":
+        with sqlite3.connect("Mobile.db") as conn:
+            conn.row_factory = dict_factory
+            cursor = conn.cursor()
+            cursor.execute(f"SELECT * FROM users WHERE user_id='{userid}'")
+
+            posts = cursor.fetchone()
+
+            response['status_code'] = 200
+            return response
+
+
 # route for the admin users
-
-
 @app.route('/view-admin/', methods=["GET"])
 def get_admin():
     response = {}
@@ -363,6 +362,7 @@ def send_email(email):
     return "Hello"
 
 
+
 # using cloudinary to change pictures to urls
 def upload_file():
     app.logger.info('in upload route')
@@ -385,4 +385,4 @@ if __name__ == '__main__':
     app.run()
 
 
-# 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
+# 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
