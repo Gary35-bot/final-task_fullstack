@@ -206,7 +206,7 @@ def get_user():
 
 # view profile
 @app.route('/view-user/<int:userid>', methods=["GET"])
-def view():
+def view(userid):
     response = {}
 
     if request.method == "GET":
@@ -217,8 +217,9 @@ def view():
 
             posts = cursor.fetchone()
 
-            response['status_code'] = 200
-            return response
+        response['status_code'] = 200
+        response['data']= posts
+        return response
 
 
 # route for the admin users
